@@ -32,14 +32,14 @@ class Model : ObservableObject {
         ref.child(path).observe(.childChanged) { snapshot in
             if let temp = snapshot.value as? String{
                 value = temp
+                return value
             }
         }
-        return value
     }
     
     func updateValues() {
-        self.temperature = self.readFromDatabase(path: "temperature")
-        print(self.temperature)
+        temperature = self.readFromDatabase(path: "temperature")
+        //print(self.temperature)
     }
     
 }
