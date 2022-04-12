@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>299050934626-v0mpgrst9ho9u5c36rnsejnke7lhfh1c.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.299050934626-v0mpgrst9ho9u5c36rnsejnke7lhfh1c</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA19edZ0yfqfmINs3pqGg6SkHfrhcCFr54</string>
+	<key>GCM_SENDER_ID</key>
+	<string>299050934626</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.yarbro.AquaponicMonitor</string>
+	<key>PROJECT_ID</key>
+	<string>aquaponics-monitoring-d2616</string>
+	<key>STORAGE_BUCKET</key>
+	<string>aquaponics-monitoring-d2616.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:299050934626:ios:71f6662ea8f265c466cc3b</string>
+	<key>DATABASE_URL</key>
+	<string>https://aquaponics-monitoring-d2616-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
