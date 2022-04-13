@@ -36,7 +36,7 @@ struct Home : View {
     ]
     
     @State var edges = UIApplication.shared.windows.first?.safeAreaInsets
-    @StateObject var model = Model(light: "", liquidLevel: "", soilMoisture: "", pH: "", temperature: "69")
+    @StateObject var model = Model(light: "0", liquidLevel: "0", soilMoisture: "0", pH: "0", temperature: "0")
     
     var body: some View {
         
@@ -85,7 +85,7 @@ struct Home : View {
                     
                    // var salesData = [
                     SalesView(sale: Sales(title: "Temperature", value: model.temperature, color: Color.red))
-                    SalesView(sale: Sales(title: "pH", value: "1,089", color: Color.green))
+                    SalesView(sale: Sales(title: "pH", value: model.pH, color: Color.green))
                         //Sales(title: "Soil Moisture", value: "8,500", color: Color.gray),
                         //Sales(title: "Water Level", value: "2,000", color: Color.blue),
                        // Sales(title: "Light", value: light, color: Color.yellow),
@@ -94,15 +94,16 @@ struct Home : View {
                 
                 HStack(spacing: 15){
                     
-                    SalesView(sale: Sales(title: "Soil Moisture", value: "8,500", color: Color.gray))
+                    SalesView(sale: Sales(title: "Soil Moisture", value: model.soilMoisture, color: Color.gray))
                     
-                    SalesView(sale: Sales(title: "Water Level", value: "2,000", color: Color.blue))
+                    SalesView(sale: Sales(title: "Water Level", value: model.liquidLevel, color: Color.blue))
                     
-                    SalesView(sale: Sales(title: "Light", value: "020", color: Color.yellow))
+                    SalesView(sale: Sales(title: "Light", value: model.light, color: Color.yellow))
                 }
             }
             .padding(.horizontal)
             .onAppear() {
+                self.model.populateFields()
                 self.model.updateValues()
             }
             
