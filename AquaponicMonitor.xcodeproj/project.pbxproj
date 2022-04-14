@@ -14,7 +14,8 @@
 		D1BC89C427F79C18002EC194 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1BC89C327F79C18002EC194 /* Assets.xcassets */; };
 		F6097B9D27FE1B9400FBB040 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6F04AF627FB873100E9F860 /* GoogleService-Info.plist */; };
 		F6776F7228060A3200D6B06A /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6776F7128060A3200D6B06A /* Model.swift */; };
-		F67CFFAE27FFE55B00691B97 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67CFFAD27FFE55B00691B97 /* ViewController.swift */; };
+		F67E00942808BA5B00206C77 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67E00932808BA5B00206C77 /* SettingsModel.swift */; };
+		F67E00962808C88D00206C77 /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67E00952808C88D00206C77 /* SignIn.swift */; };
 		F6BB82EE27FD24770079F529 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F6BB82ED27FD24770079F529 /* FirebaseAnalytics */; };
 		F6BB82F027FD24820079F529 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F6BB82EF27FD24820079F529 /* FirebaseAuth */; };
 		F6F04AF327FB7CAA00E9F860 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6F04AF227FB7CAA00E9F860 /* Images.xcassets */; };
@@ -33,6 +34,8 @@
 		D1BC89C327F79C18002EC194 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../../../Downloads/DashBoards/DashBoards/Assets.xcassets; sourceTree = "<group>"; };
 		F6776F7128060A3200D6B06A /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		F67CFFAD27FFE55B00691B97 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F67E00932808BA5B00206C77 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
+		F67E00952808C88D00206C77 /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
 		F6BB82E927FD24330079F529 /* FirebaseAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6F04AF127FB7C5C00E9F860 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F6F04AF227FB7CAA00E9F860 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -106,6 +109,8 @@
 				F6F04AF227FB7CAA00E9F860 /* Images.xcassets */,
 				F6F1946D27FE52FC009AEB77 /* ReadDatabase.swift */,
 				F6776F7128060A3200D6B06A /* Model.swift */,
+				F67E00932808BA5B00206C77 /* SettingsModel.swift */,
+				F67E00952808C88D00206C77 /* SignIn.swift */,
 			);
 			path = AquaponicMonitor;
 			sourceTree = "<group>";
@@ -243,9 +248,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6776F7228060A3200D6B06A /* Model.swift in Sources */,
+				F67E00962808C88D00206C77 /* SignIn.swift in Sources */,
+				F67E00942808BA5B00206C77 /* SettingsModel.swift in Sources */,
 				F6F1946E27FE52FC009AEB77 /* ReadDatabase.swift in Sources */,
 				D1BC89B627F79BB9002EC194 /* ContentView.swift in Sources */,
-				F67CFFAE27FFE55B00691B97 /* ViewController.swift in Sources */,
 				D1BC89B427F79BB9002EC194 /* AquaponicMonitorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

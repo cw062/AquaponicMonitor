@@ -21,7 +21,6 @@ class ReadDatabase {
         ref.child(path).observe(.childChanged) { snapshot in
             if let temp = snapshot.value as? String{
                 self.value = temp
-                print(temp)
             }
             
         }

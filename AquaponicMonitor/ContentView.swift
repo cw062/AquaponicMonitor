@@ -1,17 +1,17 @@
 import SwiftUI
-
+import Combine
 
 struct ContentView: View {
+    
     var body: some View {
-
+        
         NavigationView{
-            
             Home()
                 .preferredColorScheme(.dark)
                 .navigationTitle("")
                 .navigationBarHidden(true)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+            .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -36,10 +36,52 @@ struct Home : View {
     ]
     
     @State var edges = UIApplication.shared.windows.first?.safeAreaInsets
-    @StateObject var model = Model(light: "", liquidLevel: "", soilMoisture: "", pH: "", temperature: "69")
+    @StateObject var model = Model(light: "0", liquidLevel: "0", soilMoisture: "0", pH: "0", temperature: "0")
+    @State var showTempSettings = false
+    @State var showMoistureSettings = false
+    @State var showLightSettings = false
+    @State var showLiqLevelSettings = false
+    @State var showPHSettings = false
+    @ObservedObject var settingsModel = SettingsModel()
+    
+   // var tempSettings : some View {
+        /*TextField("Lower Boundary", text: settingsModel.lowBoundary)
+                    .keyboardType(.numberPad)
+                    .onReceive(Just(settingsModel.lowBoundary)) { newValue in
+                        let filtered = newValue.filter { "0123456789".contains($0) }
+                        if filtered != newValue {
+                            self.numOfPeople = filtered
+                        } */
+    
+    var moistureSettings : some View {
+        Text("hello")
+    }
+    var lightSettings : some View {
+        Text("hello")
+    }
+    var liqLevelSettings : some View {
+        Text("hello")
+    }
+    var pHSettings : some View {
+        Text("hello")
+    }
     
     var body: some View {
-        
+        if showTempSettings {
+            //tempSettings
+        }
+        if showPHSettings {
+            pHSettings
+        }
+        if showLightSettings {
+            lightSettings
+        }
+        if showMoistureSettings {
+            moistureSettings
+        }
+        if showLiqLevelSettings {
+            liqLevelSettings
+        }
         VStack{
             
             HStack{
@@ -84,8 +126,10 @@ struct Home : View {
                 HStack(spacing: 15){
                     
                    // var salesData = [
-                    SalesView(sale: Sales(title: "Temperature", value: model.temperature, color: Color.red))
-                    SalesView(sale: Sales(title: "pH", value: "1,089", color: Color.green))
+                    Button(action: { self.showTempSettings = true}) {
+                        SalesView(sale: Sales(title: "Temperature", value: model.temperature, color: Color.red))
+                    }
+                    SalesView(sale: Sales(title: "pH", value: model.pH, color: Color.green))
                         //Sales(title: "Soil Moisture", value: "8,500", color: Color.gray),
                         //Sales(title: "Water Level", value: "2,000", color: Color.blue),
                        // Sales(title: "Light", value: light, color: Color.yellow),
@@ -94,15 +138,16 @@ struct Home : View {
                 
                 HStack(spacing: 15){
                     
-                    SalesView(sale: Sales(title: "Soil Moisture", value: "8,500", color: Color.gray))
+                    SalesView(sale: Sales(title: "Soil Moisture", value: model.soilMoisture, color: Color.purple))
                     
-                    SalesView(sale: Sales(title: "Water Level", value: "2,000", color: Color.blue))
+                    SalesView(sale: Sales(title: "Water Level", value: model.liquidLevel, color: Color.blue))
                     
-                    SalesView(sale: Sales(title: "Light", value: "020", color: Color.yellow))
+                    SalesView(sale: Sales(title: "Light", value: model.light, color: Color.pink))
                 }
             }
             .padding(.horizontal)
             .onAppear() {
+                self.model.populateFields()
                 self.model.updateValues()
             }
             
@@ -119,11 +164,35 @@ struct Home : View {
                         Text("Historical Data")
                             .font(.title2)
                             .foregroundColor(.black)
+                            .frame(width: 300, height: 20, alignment: .center)
                         
                         Spacer(minLength: 0)
                     }
-                    .padding()
+                    .padding(.bottom, 5)
                     .padding(.top,10)
+                    
+                    HStack (spacing: 10){
+                        Text("Light")
+                            .font(.caption)
+                            .foregroundColor(.black)
+                            .onTapGesture {
+                                
+                            }
+                        Text("Moisture")
+                            .font(.caption)
+                            .foregroundColor(.black)
+                        
+                        Text("Temperature")
+                            .font(.caption)
+                            .foregroundColor(.black)
+                        Text("pH")
+                            .font(.caption)
+                            .foregroundColor(.black)
+                        Text("Liquid Level")
+                            .font(.caption)
+                            .foregroundColor(.black)
+                        
+                    }
                     
                     HStack(spacing: 10){
                         
@@ -186,11 +255,9 @@ struct HistoricalData : Identifiable {
 }
 
 struct SalesView : View {
-    
     var sale : Sales
     
     var body: some View{
-        
         ZStack{
             
             HStack{
@@ -205,15 +272,19 @@ struct SalesView : View {
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                 }
-                
+            
                 Spacer(minLength: 0)
             }
             .padding()
         }
         .background(sale.color)
         .cornerRadius(10)
+        
     }
+        
 }
+
+
 
 
 struct CustomCorners : Shape {
