@@ -7,17 +7,20 @@
 
 import Foundation
 import Combine
+import UserNotifications
 
 class SettingsModel : ObservableObject {
-    @Published var lowBoundary : Int {
-        didSet {
-            UserDefaults.standard.set(lowBoundary, forKey: "lowBoundary")
-        }
-    }
+//    @Published var ardId : String {
+     //   didSet {
+  //          UserDefaults.standard.set(ardId, forKey: "ardId")
+ //       }
+   // }
     
     init() {
-        self.lowBoundary = UserDefaults.standard.integer(forKey: "username")
+    //    self.ardId = UserDefaults.standard.string(forKey: "ardId")
+        
     }
+    
     
     
 }

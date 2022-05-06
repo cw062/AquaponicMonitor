@@ -11,10 +11,12 @@ import FirebaseAuth
 class AppViewModel: ObservableObject{
     let auth = Auth.auth()
     @Published var signedIn = false
+    @AppStorage("ardId") var ardId : String = "placeholder"
     
     var isSignedIn:Bool{
         return auth.currentUser != nil
     }
+    
     
     func signIn(email: String, password: String){
         auth.signIn(withEmail: email, password: password){[weak self] result, error in
@@ -26,7 +28,9 @@ class AppViewModel: ObservableObject{
             }
         }
 }
-
+    func changeArdId(aid : String) {
+        self.ardId = aid
+    }
     func signUp(email: String, password: String){
         auth.createUser(withEmail: email, password: password){[weak self] result, error in guard result != nil, error == nil else{
             return
@@ -48,19 +52,7 @@ struct SignIn: View {
         NavigationView {
             if viewModel.signedIn{
                 ContentView()
-          /*      VStack{
-                Text("You are signed in")
-                Button(action: {
-                    viewModel.signOut()
-                }, label: {
-                    Text("Sign Out")
-                        .frame(width: 200, height: 50)
-                        .background(Color.green)
-                        .foregroundColor(Color.blue)
-                        .padding()
-                })
-                }
-            */ }
+            }
             else{
                 SignInView()
             }
@@ -116,6 +108,7 @@ struct SignInView: View {
 struct SignUpView: View {
     @State var email = ""
     @State var password = ""
+    @State var ardId = ""
     @EnvironmentObject var viewModel: AppViewModel
     var body: some View {
         VStack{
@@ -134,10 +127,16 @@ struct SignUpView: View {
                     .autocapitalization(.none)
                     .padding()
                     .background(Color(.secondarySystemBackground))
+                TextField("Arduino ID", text: $ardId)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
                 Button(action: {
-                    guard !email.isEmpty, !password.isEmpty else{
+                    guard !email.isEmpty, !password.isEmpty, !ardId.isEmpty else{
                         return
                     }
+                    viewModel.changeArdId(aid: ardId)
                     viewModel.signUp(email: email, password: password)
                 }, label: {
                     Text("Create Account")
