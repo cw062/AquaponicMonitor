@@ -7,9 +7,13 @@ struct ContentView: View {
         
         NavigationView{
             Home()
-                .preferredColorScheme(.dark)
-                .navigationTitle("")
+                .preferredColorScheme(.light)
+                .navigationTitle("My Aquaponics Monitor")
                 .navigationBarHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                        
+                
+            
         }
             .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -24,233 +28,235 @@ struct ContentView_Previews: PreviewProvider {
 struct Home : View {
     
     @Namespace var animation
-    @State var historicData = [
-        
-            HistoricalData(day: Calendar.current.date(byAdding: .day, value: -6, to: Date())!, value: 200, show: true),
-            HistoricalData(day: Calendar.current.date(byAdding: .day, value: -5, to: Date())!, value: 710, show: false),
-            HistoricalData(day: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, value: 330, show: false),
-            HistoricalData(day: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, value: 519, show: false),
-            HistoricalData(day: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, value: 150, show: false),
-            HistoricalData(day: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, value: 229, show: false),
-            HistoricalData(day: Date(), value: 669, show: false)
-    ]
+    
     
     @State var edges = UIApplication.shared.windows.first?.safeAreaInsets
-    @StateObject var model = Model(light: "0", liquidLevel: "0", soilMoisture: "0", pH: "0", temperature: "0")
-    @State var showTempSettings = false
-    @State var showMoistureSettings = false
-    @State var showLightSettings = false
-    @State var showLiqLevelSettings = false
-    @State var showPHSettings = false
-    @ObservedObject var settingsModel = SettingsModel()
+    @EnvironmentObject var viewModel: AppViewModel
+    @EnvironmentObject var model : Model
+    @AppStorage("soilMoistureLow") var soilMoistureLow : Double = 0
+    @AppStorage("soilMoistureHigh") var soilMoistureHigh : Double = 0
+    @AppStorage("temperatureLow") var temperatureLow : Double = 0
+    @AppStorage("temperatureHigh") var temperatureHigh : Double = 0
+    @AppStorage("lightLow") var lightLow : Double = 0
+    @AppStorage("lightHigh") var lightHigh : Double = 0
+    @AppStorage("pHLow") var pHLow : Double = 0
+    @AppStorage("pHHigh") var pHHigh : Double = 0
+    @State var historicData = [
+           
+               HistoricalData(day: Calendar.current.date(byAdding: .day, value: -6, to: Date())!, value: 20, show: true),
+               HistoricalData(day: Calendar.current.date(byAdding: .day, value: -5, to: Date())!, value: 60, show: false),
+               HistoricalData(day: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, value: 30, show: false),
+               HistoricalData(day: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, value: 50, show: false),
+               HistoricalData(day: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, value: 40, show: false),
+               HistoricalData(day: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, value: 70, show: false),
+               HistoricalData(day: Date(), value: 4, show: false)
+       ]
     
-   // var tempSettings : some View {
-        /*TextField("Lower Boundary", text: settingsModel.lowBoundary)
-                    .keyboardType(.numberPad)
-                    .onReceive(Just(settingsModel.lowBoundary)) { newValue in
-                        let filtered = newValue.filter { "0123456789".contains($0) }
-                        if filtered != newValue {
-                            self.numOfPeople = filtered
-                        } */
-    
-    var moistureSettings : some View {
-        Text("hello")
-    }
-    var lightSettings : some View {
-        Text("hello")
-    }
-    var liqLevelSettings : some View {
-        Text("hello")
-    }
-    var pHSettings : some View {
-        Text("hello")
-    }
+
     
     var body: some View {
-        if showTempSettings {
-            //tempSettings
-        }
-        if showPHSettings {
-            pHSettings
-        }
-        if showLightSettings {
-            lightSettings
-        }
-        if showMoistureSettings {
-            moistureSettings
-        }
-        if showLiqLevelSettings {
-            liqLevelSettings
-        }
-        VStack{
-            
-            HStack{
+    
+        NavigationView{
+            VStack{
                 
-                Button(action: {}) {
+                HStack{
                     
-                    Image("menu")
-                        .renderingMode(.template)
-                        .foregroundColor(.white)
+                    Button(action: {model.populateFields(path: viewModel.ardId)}) {
+                        
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                    }
+                    
+                    Spacer(minLength: 0)
+                    
+                    NavigationLink( destination: SettingsPage().environmentObject(viewModel)) {
+                        
+                        Image("menu")
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                    }
                 }
-                
-                Spacer(minLength: 0)
-                
-                Button(action: {}) {
-                    
-                    Image("bell")
-                        .renderingMode(.template)
-                        .foregroundColor(.white)
-                }
-            }
-            .padding()
-                    
-            HStack{
-                
-                Text("AquaponicsMonitor")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                
-                Spacer(minLength: 0)
-            }
-            .padding()
-            .background(Color.white.opacity(0.08))
-            .clipShape(Capsule())
-            .padding(.horizontal)
+                .padding()
             
 
-            
-            // Or YOu can use Foreach Also...
-            VStack(spacing: 20){
                 
-                HStack(spacing: 15){
-                    
-                   // var salesData = [
-                    Button(action: { self.showTempSettings = true}) {
-                        SalesView(sale: Sales(title: "Temperature", value: model.temperature, color: Color.red))
-                    }
-                    SalesView(sale: Sales(title: "pH", value: model.pH, color: Color.green))
-                        //Sales(title: "Soil Moisture", value: "8,500", color: Color.gray),
-                        //Sales(title: "Water Level", value: "2,000", color: Color.blue),
-                       // Sales(title: "Light", value: light, color: Color.yellow),
-                    //]
-                }
-                
-                HStack(spacing: 15){
-                    
-                    SalesView(sale: Sales(title: "Soil Moisture", value: model.soilMoisture, color: Color.purple))
-                    
-                    SalesView(sale: Sales(title: "Water Level", value: model.liquidLevel, color: Color.blue))
-                    
-                    SalesView(sale: Sales(title: "Light", value: model.light, color: Color.pink))
-                }
-            }
-            .padding(.horizontal)
-            .onAppear() {
-                self.model.populateFields()
-                self.model.updateValues()
-            }
-            
-            ZStack{
-                
-                Color.white
-                    .clipShape(CustomCorners(corners: [.topLeft,.topRight], size: 45))
-                    .ignoresSafeArea(.all, edges: .bottom)
-                
-                VStack{
-                    
-                    HStack{
+                // Or YOu can use Foreach Also...
+                    VStack(spacing: 10){
                         
-                        Text("Historical Data")
-                            .font(.title2)
-                            .foregroundColor(.black)
-                            .frame(width: 300, height: 20, alignment: .center)
-                        
-                        Spacer(minLength: 0)
-                    }
-                    .padding(.bottom, 5)
-                    .padding(.top,10)
-                    
-                    HStack (spacing: 10){
-                        Text("Light")
-                            .font(.caption)
-                            .foregroundColor(.black)
-                            .onTapGesture {
-                                
+                        HStack(spacing: 15){
+                            
+                            NavigationLink(destination: TempSettingsView().environmentObject(model)) {
+                                SalesView(sale: Sales(title: "Temperature", value: model.temperature, color: model.calculateColor(lowBoundary: temperatureLow, highBoundary: temperatureHigh, value: model.temperature)))
                             }
-                        Text("Moisture")
-                            .font(.caption)
-                            .foregroundColor(.black)
+                            .navigationBarHidden(true)
+                            .navigationBarTitleDisplayMode(.inline)
+                            
+                            NavigationLink(destination: PHSettingsView().environmentObject(model)) {
+                                SalesView(sale: Sales(title: "pH", value: model.pH, color: model.calculateColor(lowBoundary: pHLow, highBoundary: pHHigh, value: model.pH)))
+                            }
+                            .navigationBarHidden(true)
+                            .navigationBarTitleDisplayMode(.inline)
+                            
+                        }
                         
-                        Text("Temperature")
-                            .font(.caption)
-                            .foregroundColor(.black)
-                        Text("pH")
-                            .font(.caption)
-                            .foregroundColor(.black)
-                        Text("Liquid Level")
-                            .font(.caption)
-                            .foregroundColor(.black)
-                        
+                        HStack(spacing: 15){
+                            
+                            NavigationLink(destination: MoistureSettingsView().environmentObject(model)) {
+                                SalesView(sale: Sales(title: "Moisture", value: model.soilMoisture, color: model.calculateColor(lowBoundary: soilMoistureLow, highBoundary: soilMoistureHigh, value: model.soilMoisture)))
+                            }
+                            
+                                SalesView(sale: Sales(title: "Water Level", value: model.liquidLevel, color: model.calculateLiqLevelColor(value: model.liquidLevel)))
+                           
+
+                            NavigationLink(destination: LightSettingsView().environmentObject(model)) {
+                                SalesView(sale: Sales(title: "Light", value: model.light, color: model.calculateColor(lowBoundary: lightLow, highBoundary: lightHigh, value: model.light)))
+                            }
+                            .navigationBarHidden(true)
+                            .navigationBarTitleDisplayMode(.inline)
+                            
+                        }
                     }
+                    .padding(.horizontal)
+                    .onAppear() {
+                        self.model.populateFields(path : viewModel.ardId)
+                        self.model.updateValues(path : viewModel.ardId)
+                    }
+                
+                    ZStack{
                     
-                    HStack(spacing: 10){
+                        Color.white
+                            .clipShape(CustomCorners(corners: [.topLeft,.topRight], size: 45))
+                            .ignoresSafeArea(.all, edges: .bottom)
                         
-                        ForEach(historicData.indices,id: \.self){i in
+                        VStack{
                             
-                            // For Toggling Show Button....
-                            
-                            GraphView(data: historicData[i], allData: historicData)
-                                .onTapGesture {
-                                    
-                                    withAnimation{
-                                        
-                                        // toggling all other...
-                                        
-                                        for index in 0..<historicData.count{
-                                            
-                                            historicData[index].show = false
-                                        }
-                                        
-                                        historicData[i].show.toggle()
-                                    }
-                                }
-                            
-                            // sample Sapcing For Spacing Effect..
-                            
-                            if historicData[i].value != historicData.last!.value{
+                            HStack{
+                                
+                                Text("Historical Data")
+                                    .font(.title2)
+                                    .foregroundColor(.black)
+                                    .frame(width: 300, height: 20, alignment: .center)
                                 
                                 Spacer(minLength: 0)
                             }
-                        }
+                            .padding(.bottom, 5)
+                            .padding(.top,10)
+                            
+                            HStack (spacing: 10){
+                                Button("Light", action: {
+                                    historicData = [
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -6, to: Date())!, value: self.model.data.daySeven.li, show: true),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -5, to: Date())!, value: self.model.data.daySix.li, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, value: self.model.data.dayFive.li, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, value: self.model.data.dayFour.li, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, value: self.model.data.dayThree.li, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, value: self.model.data.dayTwo.li, show: false),
+                                        HistoricalData(day: Date(), value: self.model.data.dayOne.li, show: false)]})
+                                Button("Moisture", action: {
+                                    historicData = [
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -6, to: Date())!, value: self.model.data.daySeven.mois, show: true),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -5, to: Date())!, value: self.model.data.daySix.mois, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, value: self.model.data.dayFive.mois, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, value: self.model.data.dayFour.mois, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, value: self.model.data.dayThree.mois, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, value: self.model.data.dayTwo.mois, show: false),
+                                        HistoricalData(day: Date(), value: self.model.data.dayOne.mois, show: false)]})
+                                                            
+                                Button("Temperature", action: {
+                                    historicData = [
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -6, to: Date())!, value: self.model.data.daySeven.temp, show: true),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -5, to: Date())!, value: self.model.data.daySix.temp, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, value: self.model.data.dayFive.temp, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, value: self.model.data.dayFour.temp, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, value: self.model.data.dayThree.temp, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, value: self.model.data.dayTwo.temp, show: false),
+                                        HistoricalData(day: Date(), value: self.model.data.dayOne.temp, show: false)]})
+                                Button("pH", action: {
+                                    historicData = [
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -6, to: Date())!, value: self.model.data.daySeven.pH2, show: true),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -5, to: Date())!, value: self.model.data.daySix.pH2, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, value: self.model.data.dayFive.pH2, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, value: self.model.data.dayFour.pH2, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, value: self.model.data.dayThree.pH2, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, value: self.model.data.dayTwo.pH2, show: false),
+                                        HistoricalData(day: Date(), value: self.model.data.dayOne.pH2, show: false)]})
+                                Button("Liquid Level", action: {
+                                    historicData = [
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -6, to: Date())!, value: self.model.data.daySeven.liqLevel, show: true),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -5, to: Date())!, value: self.model.data.daySix.liqLevel, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, value: self.model.data.dayFive.liqLevel, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, value: self.model.data.dayFour.liqLevel, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, value: self.model.data.dayThree.liqLevel, show: false),
+                                        HistoricalData(day: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, value: self.model.data.dayTwo.liqLevel, show: false),
+                                        HistoricalData(day: Date(), value: self.model.data.dayOne.liqLevel, show: false)]})
+                                                            
+                                }
+                            HStack(spacing: 10) {
+                                ForEach(historicData.indices,id: \.self){i in
+                                    
+                                    
+                                    GraphView(data: historicData[i], allData: historicData)
+                                        .onTapGesture {
+                                            
+                                            withAnimation{
+                                                
+                                                // toggling all other...
+                                                
+                                                for index in 0..<historicData.count{
+                                                    
+                                                    historicData[index].show = false
+                                                }
+                                                
+                                                historicData[i].show.toggle()
+                                            }
+                                        }
+                                    
+                                    
+                                    if historicData[i].value != historicData.last!.value{
+                                        
+                                        Spacer(minLength: 0)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal,30)
+                            .padding(.bottom,edges!.bottom == 0 ? 15 : 0)
+                            .onAppear() {
+                                self.model.readHistoricalData(path: String(self.viewModel.ardId))
+                            }
                     }
-                    .padding(.horizontal,30)
-                    .padding(.bottom,edges!.bottom == 0 ? 15 : 0)
+                    .padding(.top,20)
                 }
             }
-            .padding(.top,20)
+            .background(Color("bg").ignoresSafeArea(.all, edges: .all))
         }
-        .background(Color("bg").ignoresSafeArea(.all, edges: .all))
+        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
-   
 }
-                              
 struct Sales : Identifiable {
     
     var id = UUID().uuidString
     var title : String
-    var value : String
+    var value : Double
     var color : Color
 }
-                              
 
+struct historicDataTuple {
+    var temperature : Double = 0
+    var light : Double = 0
+    var moisture : Double = 0
+    var pH : Double = 0
+    var liqLevel : Double = 0
+    var time : Int = 0
 
-// Daily Sold Model And Data....
+}
+
 
 struct HistoricalData : Identifiable {
     var id = UUID().uuidString
     var day : Date
-    var value : CGFloat
+    var value : Double
     var show : Bool
 }
 
@@ -262,12 +268,12 @@ struct SalesView : View {
             
             HStack{
                 
-                VStack(alignment: .leading, spacing: 22) {
+                VStack(alignment: .leading, spacing: 20) {
                     
                     Text(sale.title)
                         .foregroundColor(.white)
                     
-                    Text(sale.value)
+                    Text(String(sale.value))
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -315,7 +321,7 @@ struct GraphView : View {
                     
                     Spacer(minLength: 0)
                     
-                    Text("\(Int(data.value))")
+                    Text("\(data.value)")
                         .font(.caption)
                         .fontWeight(.bold)
                         .foregroundColor(.black)
@@ -342,7 +348,7 @@ struct GraphView : View {
         return format.string(from: date)
     }
     
-    func calulateHeight(value: CGFloat,height: CGFloat)->CGFloat{
+    func calulateHeight(value: Double,height: CGFloat)->CGFloat{
         
         let max = allData.max { (max, sale) -> Bool in
             
